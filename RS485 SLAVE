@@ -1,0 +1,77 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+// Define pin numbers for control and LED.
+int Enable_pin = 4;
+int led_pin = 15;
+
+// Define constants for PWM settings.
+const int frequency = 5000;
+const int led_channel = 0;
+const int resolution = 8;
+
+// Create an instance of the Adafruit SSD1306 library.
+Adafruit_SSD1306 display = Adafruit_SSD1306(128, 64, &Wire, -1);
+
+void setup()
+{
+  // Start serial communication with the baud rate of 115200 bits per second.
+  Serial.begin(115200);
+
+  // Set the LED pin as an OUTPUT pin.
+  pinMode(led_pin, OUTPUT);
+
+  // Set the Enable_pin as an OUTPUT and set it to LOW (receive value from Master).
+  pinMode(Enable_pin, OUTPUT);
+  digitalWrite(Enable_pin, LOW);
+
+  // Initialize the display with the given resolution.
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+
+  // Display setup: clear the display, show and delay to stabilize.
+  display.display();
+  delay(100);
+  display.clearDisplay();
+  display.display();
+  display.setTextColor(WHITE);
+}
+
+void loop()
+{
+  // Wait until data is available on the serial communication line.
+  while (Serial.available())
+  {
+    // Clear the display to update the information.
+    display.clearDisplay();
+
+    // Read the PWM value sent by the Master.
+    int PWM_master = Serial.parseInt();
+
+    // Map the received PWM value (0-1023) to the LED's duty cycle (0-255).
+    int duty_cycle = map(PWM_master, 0, 1023, 0, 255);
+
+    // Print the duty_cycle value to the serial monitor for debugging purposes.
+    Serial.println(duty_cycle);
+
+    // Set up PWM for the LED.
+    ledcSetup(led_channel, frequency, resolution);
+
+    // Attach the LED pin to the selected PWM channel.
+    ledcAttachPin(led_pin, led_channel);
+
+    // Set the duty cycle of the LED using the mapped value.
+    ledcWrite(led_channel, duty_cycle);
+
+    // Display the information on the OLED screen.
+    display.setCursor(0, 0);
+    display.setTextSize(2);
+    display.print("MASTER PWM");
+
+    display.setCursor(50, 30);
+    display.setTextSize(4);
+    display.print(duty_cycle);
+
+    display.display();
+    delay(100);
+  }
+}
