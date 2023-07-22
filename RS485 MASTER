@@ -1,0 +1,40 @@
+// Define a variable 'Enable_pin' and assign it the value 4.
+int Enable_pin = 4;
+
+// Define a variable 'Analog_pin' and assign it the value 26.
+int Analog_pin = 26;
+
+// Define a variable 'ADC_Value' and initialize it to 0.
+int ADC_Value = 0;
+
+// This is the setup function, which runs once when the Arduino is powered on or reset.
+void setup()
+{
+  // Start communication with the serial port at a baud rate of 115200 bits per second.
+  Serial.begin(115200);
+
+  // Set the pin with the number stored in 'Enable_pin' as an OUTPUT pin.
+  pinMode(Enable_pin, OUTPUT);
+
+  // Set the pin with the number stored in 'Analog_pin' as an INPUT pin.
+  pinMode(Analog_pin, INPUT);
+
+  // Add a delay of 10 milliseconds.
+  delay(10);
+
+  // Set the pin with the number stored in 'Enable_pin' to HIGH (turning it on).
+  digitalWrite(Enable_pin, HIGH);
+}
+
+// This is the loop function, which runs repeatedly after the setup function has executed.
+void loop()
+{
+  // Declare a local variable 'ADC_Value' and assign it the value read from the analog pin with the number stored in 'Analog_pin'.
+  int ADC_Value = analogRead(Analog_pin);
+
+  // Send the 'ADC_Value' over the serial port to be displayed or logged.
+  Serial.println(ADC_Value);
+
+  // Add a delay of 1000 milliseconds (1 second) before the next loop iteration.
+  delay(1000);
+}
