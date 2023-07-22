@@ -28,12 +28,7 @@ For this project, you will need the following components:
 ## Wiring Diagram
 
 Please refer to the provided wiring diagrams for connecting the components:
-
-### Master:
-![Master Wiring Diagram](master_wiring_diagram.png)
-
-### Slave:
-![Slave Wiring Diagram](slave_wiring_diagram.png)
+![image](https://github.com/Shivani9698/RS485-Communication-module-/assets/119753029/faada69c-f629-4918-b275-f6939bf47137)
 
 ## Installation
 
